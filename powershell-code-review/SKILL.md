@@ -55,7 +55,7 @@ Ruthlessly eliminate (see full list in [review-philosophy.md](references/review-
 After deleting, simplify what remains:
 - Replace loops with pipeline operations where appropriate
 - Replace string building with here-strings
-- Replace custom formatting with `Format-Table`/`Format-List`
+- Replace custom formatting with structured objects or `Select-Object` calculated properties; leave final formatting to the caller
 - Remove abstraction layers with no real reuse
 
 **Step 4 — Accelerate**
