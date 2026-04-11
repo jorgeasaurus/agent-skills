@@ -89,7 +89,7 @@ This is the most important step. If you are not occasionally shocked by what you
 | Nested `if` blocks > 3 deep | Guard clauses (early return) |
 | `$result = @(); foreach { $result += ... }` | `$result = ... | ForEach-Object { ... }` |
 | Manual CSV/JSON parsing | `ConvertFrom-Csv`, `ConvertFrom-Json` |
-| Custom format output | `Format-Table`, `Format-List`, `Select-Object` |
+| Custom output shaping | Return objects; use `Select-Object` to choose properties |
 | Multi-line parameter splatting for 1–2 params | Inline parameters |
 
 #### Never Nesting
