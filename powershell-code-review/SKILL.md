@@ -88,11 +88,13 @@ See [review-philosophy.md](references/review-philosophy.md) for per-category che
 Output a markdown report using the structure in [report-template.md](references/report-template.md):
 
 ```
+## Executive Summary
 ## Critical Issues
 ## Recommended Deletions
 ## Recommended Enhancements
 ## Optional Improvements
 ## Risk Assessment
+## Appendix: Deletion Summary
 ```
 
 Save the report as `<ScriptName>-review.md` unless the user specifies a path.
