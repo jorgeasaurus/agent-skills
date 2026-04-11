@@ -114,8 +114,8 @@ function Get-Thing {
 # Good — guard clauses
 function Get-Thing {
     param($Path)
-    if (-not (Test-Path $Path)) { $PSCmdlet.ThrowTerminatingError(...); return }
-    if ($Path -notmatch '\.ps1$') { $PSCmdlet.ThrowTerminatingError(...); return }
+    if (-not (Test-Path $Path)) { $PSCmdlet.ThrowTerminatingError(...) }
+    if ($Path -notmatch '\.ps1$') { $PSCmdlet.ThrowTerminatingError(...) }
     # real work
 }
 ```
