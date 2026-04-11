@@ -61,7 +61,7 @@ This is the most important step. If you are not occasionally shocked by what you
 
 ##### Abstractions
 - Wrapper classes/objects around hashtables with no additional behavior
-- Custom `PSCustomObject` where a hashtable suffices
+- Custom wrapper `PSCustomObject` used only as an unnecessary abstraction where a hashtable suffices (`PSCustomObject` is still preferred for structured returned output)
 - Interfaces and base classes with one implementation
 - Generic utilities built for "reuse" that are only used once
 
