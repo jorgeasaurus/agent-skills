@@ -25,6 +25,17 @@ Full project scaffolding for production-ready PowerShell modules — from a sing
 - **VS Code integration** — Workspace file, editor settings, and task definitions for build/test/analyze/format
 - **GitHub community files** — Issue templates, PR template, security policy, funding config, and Copilot instructions
 
+### [powershell-code-review](powershell-code-review/)
+
+Production-readiness code review for PowerShell scripts and modules, applying Elon Musk's 5-Step Design Process.
+
+- **5-Step review process** — Question requirements, delete ruthlessly, simplify, accelerate, automate — in that order
+- **Code elimination** — Identifies functions, parameters, abstractions, and logic blocks that should not exist
+- **Security audit** — Credentials, tokens, injection risks, least privilege, destructive operation guards
+- **Performance analysis** — N+1 patterns, unnecessary materialization, pipeline blocking, redundant API calls
+- **Structured report** — Outputs a markdown report with Critical Issues, Recommended Deletions, Enhancements, and Risk Assessment
+- **No politeness tax** — Direct criticism with quantified cost and forced author justification for every finding
+
 ## Usage
 
 Add a skill to your Copilot configuration by referencing it from this repository:
@@ -39,6 +50,10 @@ Add a skill to your Copilot configuration by referencing it from this repository
     {
       "name": "powershell-module-scaffold",
       "source": "github:jorgeasaurus/agent-skills/powershell-module-scaffold"
+    },
+    {
+      "name": "powershell-code-review",
+      "source": "github:jorgeasaurus/agent-skills/powershell-code-review"
     }
   ]
 }
