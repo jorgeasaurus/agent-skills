@@ -19,6 +19,9 @@ See [tests.md](tests.md) for examples and [mocking.md](mocking.md) for mocking g
 
 **DO NOT write all tests first, then all implementation.** This is "horizontal slicing" - treating RED as "write all tests" and GREEN as "write all code."
 
+This is a common anti-pattern that leads to brittle, low-value tests. It tempts you to write tests for imagined behavior before you understand the implementation. You end up testing the shape of things (data structures, function signatures) rather than user-facing behavior. Tests become insensitive to real changes - they pass when behavior breaks, fail when behavior is fine. You outrun your headlights, committing to test structure before understanding the implementation.
+Do not add tests which simply restate the implementation. These provide zero confidence. They are a maintenance burden and give a false sense of security. They don't verify behavior, just that you wrote the code you planned to write.
+
 This produces **crap tests**:
 
 - Tests written in bulk test _imagined_ behavior, not _actual_ behavior
