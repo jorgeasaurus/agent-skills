@@ -2,6 +2,16 @@
 
 A collection of reusable agent skills for development workflows. Each skill lives in its own directory and provides domain-specific instructions, references, and supporting scripts for Copilot, Codex, Claude, and other agent runtimes.
 
+## Quick Start
+
+Install everything in one shot without cloning the repo first:
+
+```powershell
+irm https://raw.githubusercontent.com/jorgeasaurus/agent-skills/main/scripts/Install-AgentSkills-Bootstrap.ps1 | iex
+```
+
+That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/agent-skills`, then installs the skills into the default global folders for `.agents`, Codex, Claude, and Copilot.
+
 ## Skills
 
 | Skill | Purpose |
@@ -97,15 +107,6 @@ global `.agents`, Codex, Claude, and Copilot skill folders:
 ```powershell
 ./scripts/Install-AgentSkills.ps1
 ```
-
-You can also install everything in one shot without cloning the repo first:
-
-```powershell
-irm https://raw.githubusercontent.com/jorgeasaurus/agent-skills/main/scripts/Install-AgentSkills.ps1 | iex
-```
-
-That one-liner bootstraps a cached clone under `~/.agent-skills/agent-skills`
-when needed, then installs the skills from there.
 
 The installer writes to these locations by default and replaces any existing
 skill directory with the same name:

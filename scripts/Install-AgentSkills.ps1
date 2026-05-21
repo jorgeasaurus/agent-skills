@@ -77,218 +77,235 @@ param(
     [switch]$PassThru
 )
 
-begin {
-    Set-StrictMode -Version Latest
-    $ErrorActionPreference = 'Stop'
+Set-StrictMode -Version Latest
+$ErrorActionPreference = 'Stop'
 
-    function Resolve-FullPath {
-        [CmdletBinding()]
-        param(
-            [Parameter(Mandatory)]
-            [string]$Path
-        )
+$resolvedRepositoryRoot = $null
 
-        [System.IO.Path]::GetFullPath($Path)
+function Resolve-FullPath {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    [System.IO.Path]::GetFullPath($Path)
+}
+
+function Test-IsRepositoryRoot {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Path
+    )
+
+    if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
+        return $false
     }
 
-    function Test-IsRepositoryRoot {
-        [CmdletBinding()]
-        param(
-            [Parameter(Mandatory)]
-            [string]$Path
-        )
+    return (Test-Path -LiteralPath (Join-Path -Path $Path -ChildPath 'scripts/Import-AgentSkills.ps1') -PathType Leaf) -and
+        (Test-Path -LiteralPath (Join-Path -Path $Path -ChildPath 'README.md') -PathType Leaf)
+}
 
-        if (-not (Test-Path -LiteralPath $Path -PathType Container)) {
-            return $false
-        }
+function Get-BootstrapClonePath {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Root,
 
-        return (Test-Path -LiteralPath (Join-Path -Path $Path -ChildPath 'scripts/Import-AgentSkills.ps1') -PathType Leaf) -and
-            (Test-Path -LiteralPath (Join-Path -Path $Path -ChildPath 'README.md') -PathType Leaf)
+        [Parameter(Mandatory)]
+        [string]$Url
+    )
+
+    $trimmedUrl = $Url.TrimEnd('/')
+    $repoName = [System.IO.Path]::GetFileNameWithoutExtension($trimmedUrl)
+
+    if ([string]::IsNullOrWhiteSpace($repoName)) {
+        $repoName = 'agent-skills'
     }
 
-    function Get-BootstrapClonePath {
-        [CmdletBinding()]
-        param(
-            [Parameter(Mandatory)]
-            [string]$Root,
+    return Join-Path -Path $Root -ChildPath $repoName
+}
 
-            [Parameter(Mandatory)]
-            [string]$Url
-        )
+function Initialize-BootstrapRepository {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$Url,
 
-        $trimmedUrl = $Url.TrimEnd('/')
-        $repoName = [System.IO.Path]::GetFileNameWithoutExtension($trimmedUrl)
+        [Parameter(Mandatory)]
+        [string]$Root,
 
-        if ([string]::IsNullOrWhiteSpace($repoName)) {
-            $repoName = 'agent-skills'
-        }
+        [Parameter(Mandatory)]
+        [string]$RequestedBranch
+    )
 
-        return Join-Path -Path $Root -ChildPath $repoName
+    $gitCommand = Get-Command -Name git -ErrorAction SilentlyContinue
+    if (-not $gitCommand) {
+        throw 'git is required to bootstrap this installer from the repository URL.'
     }
 
-    function Initialize-BootstrapRepository {
-        [CmdletBinding()]
-        param(
-            [Parameter(Mandatory)]
-            [string]$Url,
-
-            [Parameter(Mandatory)]
-            [string]$Root,
-
-            [Parameter(Mandatory)]
-            [string]$RequestedBranch
-        )
-
-        $gitCommand = Get-Command -Name git -ErrorAction SilentlyContinue
-        if (-not $gitCommand) {
-            throw 'git is required to bootstrap this installer from the repository URL.'
+    if (-not (Test-Path -LiteralPath $Root -PathType Container)) {
+        if ($PSCmdlet.ShouldProcess($Root, 'Create bootstrap cache directory')) {
+            $null = New-Item -ItemType Directory -Path $Root -Force
         }
+    }
 
-        if (-not (Test-Path -LiteralPath $Root -PathType Container)) {
-            if ($PSCmdlet.ShouldProcess($Root, 'Create bootstrap cache directory')) {
-                $null = New-Item -ItemType Directory -Path $Root -Force
-            }
-        }
+    $clonePath = Get-BootstrapClonePath -Root $Root -Url $Url
+    $resolvedClonePath = Resolve-FullPath -Path $clonePath
 
-        $clonePath = Get-BootstrapClonePath -Root $Root -Url $Url
-        $resolvedClonePath = Resolve-FullPath -Path $clonePath
-
-        if (Test-IsRepositoryRoot -Path $resolvedClonePath) {
-            return $resolvedClonePath
-        }
-
-        if (Test-Path -LiteralPath $resolvedClonePath) {
-            if ($PSCmdlet.ShouldProcess($resolvedClonePath, 'Replace incomplete bootstrap directory')) {
-                Remove-Item -LiteralPath $resolvedClonePath -Recurse -Force
-            }
-        }
-
-        if ($PSCmdlet.ShouldProcess($resolvedClonePath, "Clone $Url")) {
-            & $gitCommand.Source clone --depth 1 --branch $RequestedBranch $Url $resolvedClonePath
-            if ($LASTEXITCODE -ne 0) {
-                throw "git clone failed for $Url"
-            }
-        }
-
-        if (-not (Test-IsRepositoryRoot -Path $resolvedClonePath)) {
-            throw "Bootstrapped repository is missing expected files: $resolvedClonePath"
-        }
-
+    if (Test-IsRepositoryRoot -Path $resolvedClonePath) {
         return $resolvedClonePath
     }
 
-    function Get-ManifestPath {
-        [CmdletBinding()]
-        param(
-            [Parameter(Mandatory)]
-            [string]$DirectoryPath
-        )
-
-        foreach ($candidate in @('SKILL.md', 'skill.md')) {
-            $manifestPath = Join-Path -Path $DirectoryPath -ChildPath $candidate
-            if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
-                return $manifestPath
-            }
-        }
-
-        return $null
-    }
-
-    function Get-InstallRoot {
-        [CmdletBinding()]
-        param(
-            [Parameter(Mandatory)]
-            [ValidateSet('Agents', 'Codex', 'Claude', 'Copilot')]
-            [string]$Runtime
-        )
-
-        switch ($Runtime) {
-            'Agents' {
-                return Join-Path -Path $HOME -ChildPath '.agents/skills'
-            }
-
-            'Codex' {
-                return Join-Path -Path $HOME -ChildPath '.codex/skills'
-            }
-
-            'Claude' {
-                return Join-Path -Path $HOME -ChildPath '.claude/skills'
-            }
-
-            'Copilot' {
-                return Join-Path -Path $HOME -ChildPath '.copilot/skills'
-            }
+    if (Test-Path -LiteralPath $resolvedClonePath) {
+        if ($PSCmdlet.ShouldProcess($resolvedClonePath, 'Replace incomplete bootstrap directory')) {
+            Remove-Item -LiteralPath $resolvedClonePath -Recurse -Force
         }
     }
 
-    if ($RepositoryRoot) {
-        if (-not (Test-Path -LiteralPath $RepositoryRoot -PathType Container)) {
-            throw "RepositoryRoot does not exist or is not a directory: $RepositoryRoot"
-        }
-
-        $resolvedRepositoryRoot = Resolve-FullPath -Path $RepositoryRoot
-    }
-    elseif ($PSScriptRoot) {
-        $candidateRepositoryRoot = Split-Path -Parent $PSScriptRoot
-        if (Test-IsRepositoryRoot -Path $candidateRepositoryRoot) {
-            $resolvedRepositoryRoot = Resolve-FullPath -Path $candidateRepositoryRoot
+    if ($PSCmdlet.ShouldProcess($resolvedClonePath, "Clone $Url")) {
+        & $gitCommand.Source clone --depth 1 --branch $RequestedBranch $Url $resolvedClonePath
+        if ($LASTEXITCODE -ne 0) {
+            throw "git clone failed for $Url"
         }
     }
 
-    if (-not $resolvedRepositoryRoot) {
-        $resolvedRepositoryRoot = Initialize-BootstrapRepository -Url $RepoUrl -Root $CloneRoot -RequestedBranch $Branch
+    if (-not (Test-IsRepositoryRoot -Path $resolvedClonePath)) {
+        throw "Bootstrapped repository is missing expected files: $resolvedClonePath"
     }
 
-    if (-not (Test-IsRepositoryRoot -Path $resolvedRepositoryRoot)) {
-        throw "RepositoryRoot is missing expected repository files: $resolvedRepositoryRoot"
-    }
+    return $resolvedClonePath
+}
 
-    $skillDirectories = @(
-        Get-ChildItem -LiteralPath $resolvedRepositoryRoot -Directory -Force |
-            Where-Object {
-                $null -ne (Get-ManifestPath -DirectoryPath $_.FullName)
-            } |
-            Sort-Object -Property Name
+function Get-ManifestPath {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$DirectoryPath
     )
 
-    if (-not $skillDirectories) {
-        throw "No top-level skills were found in repository root: $resolvedRepositoryRoot"
+    foreach ($candidate in @('SKILL.md', 'skill.md')) {
+        $manifestPath = Join-Path -Path $DirectoryPath -ChildPath $candidate
+        if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
+            return $manifestPath
+        }
+    }
+
+    return $null
+}
+
+function Get-InstallRoot {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [ValidateSet('Agents', 'Codex', 'Claude', 'Copilot')]
+        [string]$Runtime
+    )
+
+    switch ($Runtime) {
+        'Agents' {
+            return Join-Path -Path $HOME -ChildPath '.agents/skills'
+        }
+
+        'Codex' {
+            return Join-Path -Path $HOME -ChildPath '.codex/skills'
+        }
+
+        'Claude' {
+            return Join-Path -Path $HOME -ChildPath '.claude/skills'
+        }
+
+        'Copilot' {
+            return Join-Path -Path $HOME -ChildPath '.copilot/skills'
+        }
     }
 }
 
-process {
-    foreach ($runtime in $Target) {
-        $installRoot = Get-InstallRoot -Runtime $runtime
+function Copy-SkillDirectory {
+    [CmdletBinding()]
+    param(
+        [Parameter(Mandatory)]
+        [string]$SourcePath,
 
-        if (-not (Test-Path -LiteralPath $installRoot -PathType Container)) {
-            if ($PSCmdlet.ShouldProcess($installRoot, "Create $runtime skills directory")) {
-                $null = New-Item -ItemType Directory -Path $installRoot -Force
-            }
+        [Parameter(Mandatory)]
+        [string]$DestinationPath
+    )
+
+    $null = New-Item -ItemType Directory -Path $DestinationPath -Force
+
+    Get-ChildItem -LiteralPath $SourcePath -Force |
+        Where-Object { $_.Name -ne 'scripts' } |
+        ForEach-Object {
+            Copy-Item -LiteralPath $_.FullName -Destination $DestinationPath -Recurse -Force
         }
+}
 
-        foreach ($skillDirectory in $skillDirectories) {
-            $destinationPath = Join-Path -Path $installRoot -ChildPath $skillDirectory.Name
+if ($RepositoryRoot) {
+    if (-not (Test-Path -LiteralPath $RepositoryRoot -PathType Container)) {
+        throw "RepositoryRoot does not exist or is not a directory: $RepositoryRoot"
+    }
 
-            if ($PSCmdlet.ShouldProcess($destinationPath, "Install skill '$($skillDirectory.Name)' for $runtime")) {
-                if (Test-Path -LiteralPath $destinationPath) {
-                    Remove-Item -LiteralPath $destinationPath -Recurse -Force
-                }
+    $resolvedRepositoryRoot = Resolve-FullPath -Path $RepositoryRoot
+}
+elseif ($PSScriptRoot) {
+    $candidateRepositoryRoot = Split-Path -Parent $PSScriptRoot
+    if (Test-IsRepositoryRoot -Path $candidateRepositoryRoot) {
+        $resolvedRepositoryRoot = Resolve-FullPath -Path $candidateRepositoryRoot
+    }
+}
 
-                Copy-Item -LiteralPath $skillDirectory.FullName -Destination $destinationPath -Recurse -Force
+if (-not $resolvedRepositoryRoot) {
+    $resolvedRepositoryRoot = Initialize-BootstrapRepository -Url $RepoUrl -Root $CloneRoot -RequestedBranch $Branch
+}
 
-                $result = [pscustomobject]@{
-                    Runtime     = $runtime
-                    Skill       = $skillDirectory.Name
-                    Source      = $skillDirectory.FullName
-                    Destination = $destinationPath
-                    Action      = 'Installed'
-                    Repository  = $resolvedRepositoryRoot
-                }
+if (-not (Test-IsRepositoryRoot -Path $resolvedRepositoryRoot)) {
+    throw "RepositoryRoot is missing expected repository files: $resolvedRepositoryRoot"
+}
 
-                Write-Host "Installed $($skillDirectory.Name) for $runtime"
-                if ($PassThru) {
-                    $result
-                }
+$skillDirectories = @(
+    Get-ChildItem -LiteralPath $resolvedRepositoryRoot -Directory -Force |
+        Where-Object {
+            $null -ne (Get-ManifestPath -DirectoryPath $_.FullName)
+        }
+        Sort-Object -Property Name
+)
+
+if (-not $skillDirectories) {
+    throw "No top-level skills were found in repository root: $resolvedRepositoryRoot"
+}
+
+foreach ($runtime in $Target) {
+    $installRoot = Get-InstallRoot -Runtime $runtime
+
+    if (-not (Test-Path -LiteralPath $installRoot -PathType Container)) {
+        if ($PSCmdlet.ShouldProcess($installRoot, "Create $runtime skills directory")) {
+            $null = New-Item -ItemType Directory -Path $installRoot -Force
+        }
+    }
+
+    foreach ($skillDirectory in $skillDirectories) {
+        $destinationPath = Join-Path -Path $installRoot -ChildPath $skillDirectory.Name
+
+        if ($PSCmdlet.ShouldProcess($destinationPath, "Install skill '$($skillDirectory.Name)' for $runtime")) {
+            if (Test-Path -LiteralPath $destinationPath) {
+                Remove-Item -LiteralPath $destinationPath -Recurse -Force
+            }
+
+            Copy-SkillDirectory -SourcePath $skillDirectory.FullName -DestinationPath $destinationPath
+
+            $result = [pscustomobject]@{
+                Runtime     = $runtime
+                Skill       = $skillDirectory.Name
+                Source      = $skillDirectory.FullName
+                Destination = $destinationPath
+                Action      = 'Installed'
+                Repository  = $resolvedRepositoryRoot
+            }
+
+            Write-Host "Installed $($skillDirectory.Name) for $runtime"
+            if ($PassThru) {
+                $result
             }
         }
     }
