@@ -89,6 +89,42 @@ Use `-WhatIf` to preview what would be imported:
 ./scripts/Import-AgentSkills.ps1 -WhatIf -PassThru
 ```
 
+## Install repository skills
+
+Use the PowerShell installer to copy every top-level repository skill into your
+global `.agents`, Codex, Claude, and Copilot skill folders:
+
+```powershell
+./scripts/Install-AgentSkills.ps1
+```
+
+You can also install everything in one shot without cloning the repo first:
+
+```powershell
+irm https://raw.githubusercontent.com/jorgeasaurus/agent-skills/main/scripts/Install-AgentSkills.ps1 | iex
+```
+
+That one-liner bootstraps a cached clone under `~/.agent-skills/agent-skills`
+when needed, then installs the skills from there.
+
+The installer writes to these locations by default and replaces any existing
+skill directory with the same name:
+
+```text
+~/.agents/skills
+~/.codex/skills
+~/.claude/skills
+~/.copilot/skills
+```
+
+Use `-WhatIf` to preview the install, or `-Target` to limit which runtimes are
+updated:
+
+```powershell
+./scripts/Install-AgentSkills.ps1 -WhatIf -PassThru
+./scripts/Install-AgentSkills.ps1 -Target Agents,Codex,Claude
+```
+
 ## Usage
 
 Reference a skill from this repository in an agent configuration:
