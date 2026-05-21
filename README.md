@@ -10,7 +10,7 @@ Install everything in one shot without cloning the repo first:
 irm https://raw.githubusercontent.com/jorgeasaurus/agent-skills/main/scripts/Install-AgentSkills-Bootstrap.ps1 | iex
 ```
 
-That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/agent-skills`, then installs the skills into the default global folders for `.agents`, Codex, Claude, and Copilot.
+That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/agent-skills`, then installs the skills into any supported runtime home folders that already exist.
 
 ## Skills
 
@@ -102,14 +102,15 @@ Use `-WhatIf` to preview what would be imported:
 ## Install repository skills
 
 Use the PowerShell installer to copy every top-level repository skill into your
-global `.agents`, Codex, Claude, and Copilot skill folders:
+existing `.agents`, Codex, Claude, and Copilot skill folders:
 
 ```powershell
 ./scripts/Install-AgentSkills.ps1
 ```
 
-The installer writes to these locations by default and replaces any existing
-skill directory with the same name:
+The installer checks these runtime homes by default. If the hidden runtime home
+folder exists, it installs into that runtime's `skills` folder and replaces any
+existing skill directory with the same name:
 
 ```text
 ~/.agents/skills
