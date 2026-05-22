@@ -44,7 +44,6 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [msgraph](msgraph/) | Local Microsoft Graph API endpoint and schema knowledge. |
 | [onboard-computer](onboard-computer/) | Generates `.onboard` files and dependency scans. |
 | [openai-docs](openai-docs/) | Uses official OpenAI documentation for API and product guidance. |
-| [openclaw](openclaw/) | OpenClaw planning and agent workflow support. |
 | [playground](playground/) | Creates interactive single-file HTML playgrounds. |
 | [playwright-testing](playwright-testing/) | End-to-end testing with Playwright. |
 | [plugin-creator](plugin-creator/) | Scaffolds Codex plugin directories and manifests. |
@@ -53,6 +52,7 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [powershell-code-review](powershell-code-review/) | Production-readiness review for PowerShell scripts and modules. |
 | [powershell-expert](powershell-expert/) | PowerShell scripting, modules, GUI, and gallery guidance. |
 | [powershell-module-scaffold](powershell-module-scaffold/) | Scaffolds production-ready PowerShell modules. |
+| [powershell-nasa-power-of-ten](powershell-nasa-power-of-ten/) | Reviews and refactors PowerShell with NASA/JPL Power of Ten principles. |
 | [pptx](pptx/) | Reads, creates, and modifies PowerPoint presentations. |
 | [react-components](react-components/) | Converts designs into modular Vite and React components. |
 | [remotion-best-practices](remotion-best-practices/) | Best practices for Remotion video creation in React. |
@@ -63,6 +63,7 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [stripe-best-practices](stripe-best-practices/) | Stripe checkout, subscriptions, webhooks, and API integration guidance. |
 | [tdd](tdd/) | Test-driven development using red-green-refactor. |
 | [tdd-red-green-refactor](tdd-red-green-refactor/) | Disciplined TypeScript/Node.js TDD workflow. |
+| [thermo-nuclear-code-quality-review](thermo-nuclear-code-quality-review/) | Strict maintainability review for abstractions, large files, and condition sprawl. |
 | [typed-service-contracts](typed-service-contracts/) | Type-safe TypeScript service contracts with spec and handler patterns. |
 | [web-design-guidelines](web-design-guidelines/) | Reviews web UI code for design and accessibility quality. |
 | [writing-hookify-rules](writing-hookify-rules/) | Creates Hookify rules and explains rule syntax. |
