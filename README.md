@@ -38,6 +38,7 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [improve-codebase-architecture](improve-codebase-architecture/) | Finds architecture, testability, and maintainability improvements. |
 | [ink](ink/) | Builds terminal UIs with Ink and JSON render specs. |
 | [karpathy-guidelines](karpathy-guidelines/) | Behavioral guidelines for safer, simpler LLM coding. |
+| [market-data-freshness-review](market-data-freshness-review/) | Reviews and updates market data pipelines for freshness and calculation correctness. |
 | [make-plan](make-plan/) | Creates phased implementation plans with documentation discovery. |
 | [mcp-integration](mcp-integration/) | Integrates MCP servers into Claude Code plugins. |
 | [mem-search](mem-search/) | Searches persistent cross-session Claude memory. |
@@ -54,7 +55,13 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [powershell-module-scaffold](powershell-module-scaffold/) | Scaffolds production-ready PowerShell modules. |
 | [powershell-nasa-power-of-ten](powershell-nasa-power-of-ten/) | Reviews and refactors PowerShell with NASA/JPL Power of Ten principles. |
 | [pptx](pptx/) | Reads, creates, and modifies PowerPoint presentations. |
+| [ponytail](ponytail/) | Enforces the simplest working implementation: YAGNI, stdlib, native, then minimal code. |
+| [ponytail-audit](ponytail-audit/) | Audits a repo for over-engineering, bloat, and removable complexity. |
+| [ponytail-debt](ponytail-debt/) | Builds a ledger from `ponytail:` shortcut comments. |
+| [ponytail-help](ponytail-help/) | Shows the Ponytail mode and command reference card. |
+| [ponytail-review](ponytail-review/) | Reviews diffs exclusively for over-engineering and deletion opportunities. |
 | [react-components](react-components/) | Converts designs into modular Vite and React components. |
+| [react-doctor-fix](react-doctor-fix/) | Fixes React Doctor findings and verifies a clean score. |
 | [remotion-best-practices](remotion-best-practices/) | Best practices for Remotion video creation in React. |
 | [setup-matt-pocock-skills](setup-matt-pocock-skills/) | Configures project context for Matt Pocock-style engineering skills. |
 | [skill-creator](skill-creator/) | Creates, improves, evaluates, and benchmarks skills. |

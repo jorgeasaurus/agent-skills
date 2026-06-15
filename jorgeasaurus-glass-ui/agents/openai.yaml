@@ -1,0 +1,8 @@
+interface:
+  display_name: "Jorgeasaurus Glass UI"
+  short_description: "Build pages in the Jorgeasaurus glass style"
+  brand_color: "#9DF0B6"
+  default_prompt: "Use $jorgeasaurus-glass-ui to build this page in the site's fixed-nav glass UI style."
+
+policy:
+  allow_implicit_invocation: true
