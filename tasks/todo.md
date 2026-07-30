@@ -1,9 +1,7 @@
-- [x] Inspect `DietrichGebert/ponytail` skill sources.
-- [x] Remove the incorrectly authored hairstyle `viral-ponytail` skill.
-- [x] Add Ponytail skills from the source repository.
-- [x] Update `README.md` skill entries.
-- [x] Validate imported skills.
+- [x] Define the thermonuclear review–fix convergence workflow and guardrails.
+- [x] Create and register the reusable skill.
+- [x] Validate the skill structure and content.
 
 ## Review
 
-Replaced the incorrect hairstyle skill with Ponytail skills from `DietrichGebert/ponytail`: `ponytail`, `ponytail-review`, `ponytail-audit`, `ponytail-debt`, and `ponytail-help`. Validation passed for all five with `python3 skill-creator/scripts/quick_validate.py`.
+Created `thermonuclear-review-fix-loop`, registered it in `README.md`, and validated its frontmatter, absence of scaffold placeholders, and whitespace. The bundled Python validator could not run because PyYAML is not installed; an equivalent system-Ruby YAML validation passed instead.

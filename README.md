@@ -71,6 +71,7 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [tdd](tdd/) | Test-driven development using red-green-refactor. |
 | [tdd-red-green-refactor](tdd-red-green-refactor/) | Disciplined TypeScript/Node.js TDD workflow. |
 | [thermo-nuclear-code-quality-review](thermo-nuclear-code-quality-review/) | Strict maintainability review for abstractions, large files, and condition sprawl. |
+| [thermonuclear-review-fix-loop](thermonuclear-review-fix-loop/) | Repeats thermonuclear review and root-cause fixes until the review is clean. |
 | [typed-service-contracts](typed-service-contracts/) | Type-safe TypeScript service contracts with spec and handler patterns. |
 | [web-design-guidelines](web-design-guidelines/) | Reviews web UI code for design and accessibility quality. |
 | [writing-hookify-rules](writing-hookify-rules/) | Creates Hookify rules and explains rule syntax. |
