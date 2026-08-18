@@ -55,6 +55,11 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [powershell-module-scaffold](powershell-module-scaffold/) | Scaffolds production-ready PowerShell modules. |
 | [powershell-nasa-power-of-ten](powershell-nasa-power-of-ten/) | Reviews and refactors PowerShell with NASA/JPL Power of Ten principles. |
 | [pptx](pptx/) | Reads, creates, and modifies PowerPoint presentations. |
+| [ponytail](ponytail/) | Enforces the simplest working implementation: YAGNI, stdlib, native, then minimal code. |
+| [ponytail-audit](ponytail-audit/) | Audits a repo for over-engineering, bloat, and removable complexity. |
+| [ponytail-debt](ponytail-debt/) | Builds a ledger from `ponytail:` shortcut comments. |
+| [ponytail-help](ponytail-help/) | Shows the Ponytail mode and command reference card. |
+| [ponytail-review](ponytail-review/) | Reviews diffs exclusively for over-engineering and deletion opportunities. |
 | [react-components](react-components/) | Converts designs into modular Vite and React components. |
 | [react-doctor-fix](react-doctor-fix/) | Fixes React Doctor findings and verifies a clean score. |
 | [remotion-best-practices](remotion-best-practices/) | Best practices for Remotion video creation in React. |
@@ -66,6 +71,7 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [tdd](tdd/) | Test-driven development using red-green-refactor. |
 | [tdd-red-green-refactor](tdd-red-green-refactor/) | Disciplined TypeScript/Node.js TDD workflow. |
 | [thermo-nuclear-code-quality-review](thermo-nuclear-code-quality-review/) | Strict maintainability review for abstractions, large files, and condition sprawl. |
+| [thermonuclear-review-fix-loop](thermonuclear-review-fix-loop/) | Repeats thermonuclear review and root-cause fixes until the review is clean. |
 | [typed-service-contracts](typed-service-contracts/) | Type-safe TypeScript service contracts with spec and handler patterns. |
 | [web-design-guidelines](web-design-guidelines/) | Reviews web UI code for design and accessibility quality. |
 | [writing-hookify-rules](writing-hookify-rules/) | Creates Hookify rules and explains rule syntax. |

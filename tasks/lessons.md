@@ -1,0 +1,1 @@
+- When a skill name is ambiguous, verify whether the user means an existing project or repository before authoring a new skill from the phrase.
