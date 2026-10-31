@@ -63,6 +63,7 @@ That one-liner bootstraps or refreshes a cached clone under `~/.agent-skills/age
 | [react-components](react-components/) | Converts designs into modular Vite and React components. |
 | [react-doctor-fix](react-doctor-fix/) | Fixes React Doctor findings and verifies a clean score. |
 | [remotion-best-practices](remotion-best-practices/) | Best practices for Remotion video creation in React. |
+| [research-draft-stress-test](research-draft-stress-test/) | Turns raw notes into a draft and stress-tests it before publishing or submitting. |
 | [setup-matt-pocock-skills](setup-matt-pocock-skills/) | Configures project context for Matt Pocock-style engineering skills. |
 | [skill-creator](skill-creator/) | Creates, improves, evaluates, and benchmarks skills. |
 | [skill-development](skill-development/) | Skill structure, progressive disclosure, and development guidance. |
