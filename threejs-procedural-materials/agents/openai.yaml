@@ -1,0 +1,4 @@
+interface:
+  display_name: "Three.js Procedural Materials"
+  short_description: "Author coherent procedural PBR and emissive surfaces"
+  default_prompt: "Use $threejs-procedural-materials to build a causal procedural surface, including PBR or lava-like emissive materials, with shared fields, derivative normals, filtering, and explicit diagnostics."
