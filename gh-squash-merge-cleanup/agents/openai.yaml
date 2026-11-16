@@ -1,0 +1,4 @@
+interface:
+  display_name: "Squash, Merge, and Clean Up"
+  short_description: "Merge PRs and clean branches and preview deployments"
+  default_prompt: "Use $gh-squash-merge-cleanup to squash and merge this PR, then clean up branches and previews while preserving main, production, and dev resources."
